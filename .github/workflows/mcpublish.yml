@@ -1,12 +1,11 @@
 name: Publish On Github, CurseForge, & Modrinth
 
-on: [push, pull_request, workflow_dispatch]
+on: [pull_request, workflow_dispatch]
 
 env:
   MINECRAFT_VERSION: 1.21
   VERSION: 1.21+1.0.0
-  RELEASE_NAME: Conquest_1.21+1.0.0
-  MODRINTH_TOKEN: ${{ secrets.MODRINTH_TOKEN }}
+  RELEASE_NAME: Conquest_1.21+1.0.1
   CURSEFORGE_TOKEN: ${{ secrets.CURSEFORGE_TOKEN }}
   GITHUB_TOKEN: ${{ secrets.PUBLISH_GITHUB_TOKEN }}
 
