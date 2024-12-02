@@ -1,0 +1,49 @@
+name: Publish On Github, CurseForge, & Modrinth
+
+on: [push, pull_request, workflow_dispatch]
+
+env:
+  MINECRAFT_VERSION: 1.21
+  VERSION: 1.21+1.0.0
+  RELEASE_NAME: Conquest_1.21+1.0.0
+  MODRINTH_TOKEN: ${{ secrets.MODRINTH_TOKEN }}
+  CURSEFORGE_TOKEN: ${{ secrets.CURSEFORGE_TOKEN }}
+  GITHUB_TOKEN: ${{ secrets.PUBLISH_GITHUB_TOKEN }}
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check Environment Variables
+        run: env
+
+      - name: Checkout Repository
+        uses: actions/checkout@v3
+        with:
+            submodules: true
+
+      - name: Zipping
+        uses: vimtor/action-zip@v1
+        with:
+          files: assets/ pack.mcmeta pack.png install_guide.txt conquestpackbig.ico pack(nostalgica).png LICENSE.txt launchericons/
+          dest: "${{env.RELEASE_NAME}}.zip"
+          recursive: false
+
+      - name: Publish (CurseForge/Modrinth/GitHub)
+        uses: Kir-Antipov/mc-publish@v3.3
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+
+          files: |
+            *.zip
+
+          name: "${{env.RELEASE_NAME}}"
+          version: "${{env.VERSION}}"
+          version-type: release
+          changelog-file: CHANGELOG.md
+
+          loaders: Minecraft
+          game-versions: "${{env.MINECRAFT_VERSION}}"
